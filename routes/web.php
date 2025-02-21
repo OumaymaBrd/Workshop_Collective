@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentaireController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,3 +33,5 @@ Route::middleware(['auth', 'writer'])->group(function () {
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/my-articles', [ArticleController::class, 'myArticles'])->name('articles.my_articles');
 });
+
+Route::post('/annonces/{postID}/commentaires', [CommentaireController::class,'store']);
