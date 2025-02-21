@@ -16,18 +16,11 @@ class ArticleController extends Controller
 
     public function create()
     {
-        if (!Auth::user()->isWriter()) {
-            return redirect()->route('articles.index')->with('error', 'Only writers can create articles.');
-        }
         return view('articles.create');
     }
 
     public function store(Request $request)
     {
-        if (!Auth::user()->isWriter()) {
-            return redirect()->route('articles.index')->with('error', 'Only writers can create articles.');
-        }
-
         $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
@@ -45,7 +38,7 @@ class ArticleController extends Controller
 
         $article->save();
 
-        return redirect()->route('articles.index')->with('success', 'Article created successfully.');
+        return redirect()->route('articles.my_articles')->with('success', 'Article created successfully.');
     }
 
     public function show(Article $article)
@@ -63,5 +56,11 @@ class ArticleController extends Controller
     {
         $article->increment('dislikes');
         return back();
+    }
+
+    public function myArticles()
+    {
+        $articles = Auth::user()->articles()->latest()->get();
+        return view('articles.my_articles', compact('articles'));
     }
 }
